@@ -9,6 +9,7 @@ app = FastAPI()
 
 metro = Metro(domain="https://example.com", list_id="a", secret_key="b", app=app)
 
+# @metro.claim defines a new claim API endpoint, and vice versa for the other @metro.unclaim/approve/deny
 @metro.claim()
 async def claim(bot: BotPost):
     print("Claiming", bot)
@@ -47,5 +48,5 @@ async def setup():
     async for act in metro.paginate(metro.http.get_actions):
         print(act)
 
-    # Finally setup the API endpoints
+    # Finally setup the API endpoints, this must be done after all the @metro.* decorators to ensure they are registered with Metro Reviews
     await metro.register_api_urls()
