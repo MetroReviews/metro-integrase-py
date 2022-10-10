@@ -7,8 +7,8 @@ BASE_URL = "https://catnip.metrobots.xyz"
 """The base URL for the Metro API."""
 
 class MetroHTTP():
-    """Contains the HTTP methods for the Metro Reviews API"""
     def __init__(self, *, list_id: str, secret_key: str):
+        """Contains the HTTP methods for the Metro Reviews API"""
         self.list_id = list_id
         self.secret_key = secret_key
 

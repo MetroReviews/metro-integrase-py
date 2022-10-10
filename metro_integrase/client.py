@@ -11,40 +11,39 @@ DEFAULT_TAGS = ["Metro (Integrase)"]
 
 class Metro():
     """
-This is the actual main client you should initialize and then use
+    This is the actual main client you should initialize and then use
 
-To use the server bit, you should do something like this:
+    To use the server bit, you should do something like this:
 
-```py
+    .. code-block:: python
 
-from metro_integrase import Metro
-from fastapi import FastAPI, Request
+        from metro_integrase import Metro
+        from fastapi import FastAPI, Request
 
-app = FastAPI()
-metro = Metro(...)
+        app = FastAPI()
+        metro = Metro(...)
 
-@metro.claim()
-async def claim(bot: Bot):
-    ...
+        @metro.claim()
+        async def claim(bot: Bot):
+            ...
 
-@metro.unclaim()
-async def unclaim(bot: Bot):
-    ...
+        @metro.unclaim()
+        async def unclaim(bot: Bot):
+            ...
 
-@metro.approve()
-async def approve(bot: Bot):
-    ...
+        @metro.approve()
+        async def approve(bot: Bot):
+            ...
 
-@metro.deny()
-async def deny(bot: Bot):
-    ...
+        @metro.deny()
+        async def deny(bot: Bot):
+            ...
 
-@app.on_event("startup")
-async def startup():
-    await metro.register_api_urls()
-```
+        @app.on_event("startup")
+        async def startup():
+            await metro.register_api_urls()
 
-If you wish to use a HTTP method, use ``self.http`` or manually initialize ``MetroHTTP`` with the list ID and secret key.
+    If you wish to use a HTTP method, use ``self.http`` or manually initialize ``MetroHTTP`` with the list ID and secret key.
     """
 
     def __init__(self, *, domain: str, list_id: str, secret_key: str, app: FastAPI = None):
@@ -55,15 +54,15 @@ If you wish to use a HTTP method, use ``self.http`` or manually initialize ``Met
     
     async def paginate(self, func: Awaitable, *, limit: int = 50):
         """
-Simple helper that can be combined with a ``self.http`` paginated function to paginate a function
+        Simple helper that can be combined with a ``self.http`` paginated function to paginate a function
 
-Example:
+        Example:
 
-```py
-    async for act in metro.paginate(metro.http.get_actions):
-        print(act)
-```
-"""
+        .. code-block:: python
+
+            async for act in metro.paginate(metro.http.get_actions):
+                print(act)
+        """
         offset = 0
         while True:
             ret = await func(offset=offset, limit=limit)
@@ -116,7 +115,7 @@ Example:
         self._urls[name] = url
 
     def claim(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/claim"):
-        """"Claim API Decorator"""
+        """Claim API Decorator"""
 
         def wrapper(func: Awaitable):
             self._wrapper(url=url, name="claim", func=func, tags=tags)
@@ -124,7 +123,7 @@ Example:
         return wrapper
 
     def unclaim(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/unclaim"):
-        """"Unclaim API Decorator"""
+        """Unclaim API Decorator"""
 
         def wrapper(func: Awaitable):
             self._wrapper(url=url, name="unclaim", func=func, tags=tags)
@@ -132,7 +131,7 @@ Example:
         return wrapper
 
     def approve(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/approve"):
-        """"Approve API Decorator"""
+        """Approve API Decorator"""
 
         def wrapper(func: Awaitable):
             self._wrapper(url=url, name="approve", func=func, tags=tags)
@@ -140,7 +139,7 @@ Example:
         return wrapper
 
     def deny(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/deny"):
-        """"Deny API Decorator"""
+        """Deny API Decorator"""
 
         def wrapper(func: Awaitable):
             self._wrapper(url=url, name="deny", func=func, tags=tags)
