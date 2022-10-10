@@ -1,7 +1,7 @@
 import uuid
 import aiohttp
 
-from .models import Action, Bot, List, ListUpdate
+from .models import Action, Bot, BotPost, List, ListUpdate
 
 BASE_URL = "https://catnip.metrobots.xyz"
 """The base URL for the Metro API."""
@@ -33,6 +33,15 @@ class MetroHTTP():
             method="PATCH",
             json=update.dict()
         )
+    
+    async def add_bot(self, bot: BotPost):
+        """Add a bot to Metro Reviews"""
+        res, json = await self.request(url=f"/bots?list_id={self.list_id}", method="POST", json=bot.dict())
+
+        if not res.ok:
+            raise RuntimeError(f"Failed to add bot: {res.status}")
+
+        return Bot(**json)
 
     async def approve_bot(self, *, bot_id: str, reviewer: str, reason: str):
         """Approve a bot"""

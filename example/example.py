@@ -2,7 +2,7 @@
 import sys
 sys.path.append(".")
 
-from metro_integrase import Metro, BotPost
+from metro_integrase import Metro, Bot
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -11,19 +11,19 @@ metro = Metro(domain="https://example.com", list_id="a", secret_key="b", app=app
 
 # @metro.claim defines a new claim API endpoint, and vice versa for the other @metro.unclaim/approve/deny
 @metro.claim()
-async def claim(bot: BotPost):
+async def claim(bot: Bot):
     print("Claiming", bot)
 
 @metro.unclaim()
-async def unclaim(bot: BotPost):
+async def unclaim(bot: Bot):
     print("Unclaiming", bot)
 
 @metro.approve()
-async def approve(bot: BotPost):
+async def approve(bot: Bot):
     print("Approving", bot)
 
 @metro.deny()
-async def deny(bot: BotPost):
+async def deny(bot: Bot):
     print("Denying", bot)
 
 print(metro._urls)
@@ -50,3 +50,10 @@ async def setup():
 
     # Finally setup the API endpoints, this must be done after all the @metro.* decorators to ensure they are registered with Metro Reviews
     await metro.register_api_urls()
+
+# More things you can do
+# 
+# metro.http.add_bot(...)
+# metro.http.approve_bot(...)
+# metro.http.deny_bot(...)
+# etc.

@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
 
 from .http import MetroHTTP
-from .models import ListUpdate
+from .models import Bot, ListUpdate
 
 DEFAULT_TAGS = ["Metro (Integrase)"]
 """Default tags for the integrase routes"""
@@ -24,19 +24,19 @@ app = FastAPI()
 metro = Metro(...)
 
 @metro.claim()
-async def claim(bot: BotPost):
+async def claim(bot: Bot):
     ...
 
 @metro.unclaim()
-async def unclaim(bot: BotPost):
+async def unclaim(bot: Bot):
     ...
 
 @metro.approve()
-async def approve(bot: BotPost):
+async def approve(bot: Bot):
     ...
 
 @metro.deny()
-async def deny(bot: BotPost):
+async def deny(bot: Bot):
     ...
 
 @app.on_event("startup")
@@ -104,11 +104,12 @@ Example:
             raise ValueError("App must be passed in order to use this method")
 
         @wraps(func)
-        async def metro_f(request: Request, response: Response, *args, **kwargs):
+        async def metro_f(request: Request, response: Response, bot: Bot, *args, **kwargs):
             if request.headers.get("Authorization") != self.http.secret_key:
                 response.status_code = 401
                 return {"detail": "Invalid secret key"}
-            return await func(*args, **kwargs)
+
+            return await func(bot, *args, **kwargs)
 
         self._app.post(url, tags=tags)(metro_f)
 
