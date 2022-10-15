@@ -2,7 +2,7 @@ import datetime
 import enum
 import uuid
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 # https://github.com/MetroReviews/backend/blob/74c902cc8a10e84796ad779228ea5417fe6ba087/brc/tables.py#L9
 class ActionEnum(enum.IntEnum):
@@ -52,13 +52,13 @@ class BotPost(BaseModel):
     website: Optional[str] = None
     invite: Optional[str] = None
     owner: str
-    extra_owners: list[str] | None = []
+    extra_owners: List[str] = []
     support: Optional[str] = None
     donate: Optional[str] = None
     library: Optional[str] = None
     nsfw: Optional[bool] = False
     prefix: Optional[str] = None
-    tags: Optional[list[str]] = None
+    tags: Optional[List[str]] = None
     review_note: Optional[str] = None
     cross_add: Optional[bool] = True
 
