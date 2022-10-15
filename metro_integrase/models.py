@@ -2,6 +2,7 @@ import datetime
 import enum
 import uuid
 from pydantic import BaseModel
+from typing import Optional
 
 # https://github.com/MetroReviews/backend/blob/74c902cc8a10e84796ad779228ea5417fe6ba087/brc/tables.py#L9
 class ActionEnum(enum.IntEnum):
@@ -36,50 +37,50 @@ A lists state
 class List(BaseModel):
     id: uuid.UUID
     name: str
-    description: str | None = None
-    domain: str | None = None
+    description: Optional[str] = None
+    domain: Optional[str] = None
     state: ListState
-    icon: str | None = None
+    icon: Optional[str] = None
 
 
 # https://github.com/MetroReviews/backend/blob/74c902cc8a10e84796ad779228ea5417fe6ba087/brc/app.py#L117
 class BotPost(BaseModel):
     bot_id: str
-    banner: str | None = None
+    banner: Optional[str] = None
     description: str 
     long_description: str
-    website: str | None = None
-    invite: str | None = None
+    website: Optional[str] = None
+    invite: Optional[str] = None
     owner: str
     extra_owners: list[str] | None = []
-    support: str | None = None
-    donate: str | None = None
-    library: str | None = None
-    nsfw: bool | None = False
-    prefix: str | None = None
-    tags: list[str] | None = None
-    review_note: str | None = None
-    cross_add: bool | None = True
+    support: Optional[str] = None
+    donate: Optional[str] = None
+    library: Optional[str] = None
+    nsfw: Optional[bool] = False
+    prefix: Optional[str] = None
+    tags: Optional[list[str]] = None
+    review_note: Optional[str] = None
+    cross_add: Optional[bool] = True
 
 
 class Bot(BotPost):
     state: State
     list_source: uuid.UUID
     added_at: datetime.datetime
-    reviewer: str | None = None
-    invite_link: str | None = None
-    username: str | None = "Unknown"
+    reviewer: Optional[str] = None
+    invite_link: Optional[str] = None
+    username: Optional[str] = "Unknown"
 
 class ListUpdate(BaseModel):
-    name: str | None = None
-    description: str | None = None
-    domain: str | None = None
-    claim_bot_api: str | None = None
-    unclaim_bot_api: str | None = None
-    approve_bot_api: str | None = None
-    deny_bot_api: str | None = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    domain: Optional[str] = None
+    claim_bot_api: Optional[str] = None
+    unclaim_bot_api: Optional[str] = None
+    approve_bot_api: Optional[str] = None
+    deny_bot_api: Optional[str] = None
     reset_secret_key: bool = False
-    icon: str | None = None
+    icon: Optional[str] = None
 
 # https://github.com/MetroReviews/backend/blob/main/brc/app.py#L247
 class Action(BaseModel):
