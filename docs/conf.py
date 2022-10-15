@@ -6,9 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import sys
-sys.path.append(".")
-sys.path.append("..")
+import os
+
+if not os.environ.get("PYTHON_VERSION"):
+  import sys
+  sys.path.append(".")
+  sys.path.append("..")
 
 project = 'metro_integrase_py'
 copyright = '2022, Rootspring'
