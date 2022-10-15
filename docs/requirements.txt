@@ -1,4 +1,4 @@
 sphinx
 furo
 myst_parser
-metro_integrase
+git+https://github.com/MetroReviews/metro-integrase-py
