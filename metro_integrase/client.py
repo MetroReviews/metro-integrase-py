@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Awaitable
+from typing import Awaitable, List as ListT
 from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
 
@@ -67,7 +67,7 @@ class Metro():
         while True:
             ret = await func(offset=offset, limit=limit)
 
-            json: list[dict] = ret[0]
+            json: ListT[dict] = ret[0]
             model: BaseModel = ret[1]
 
             if not json:
@@ -98,7 +98,7 @@ class Metro():
             raise RuntimeError(f"Metro setup failed: {res.status}. Ensure proper list ID and secret key...")
     
     # HTTP Server Code
-    def _wrapper(self, *, url: str, name: str, func: Awaitable, tags: list[str]):
+    def _wrapper(self, *, url: str, name: str, func: Awaitable, tags: ListT[str]):
         if not self._app:
             raise ValueError("App must be passed in order to use this method")
 
@@ -114,7 +114,7 @@ class Metro():
 
         self._urls[name] = url
 
-    def claim(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/claim"):
+    def claim(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/claim"):
         """Claim API Decorator"""
 
         def wrapper(func: Awaitable):
@@ -122,7 +122,7 @@ class Metro():
         
         return wrapper
 
-    def unclaim(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/unclaim"):
+    def unclaim(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/unclaim"):
         """Unclaim API Decorator"""
 
         def wrapper(func: Awaitable):
@@ -130,7 +130,7 @@ class Metro():
         
         return wrapper
 
-    def approve(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/approve"):
+    def approve(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/approve"):
         """Approve API Decorator"""
 
         def wrapper(func: Awaitable):
@@ -138,7 +138,7 @@ class Metro():
         
         return wrapper
 
-    def deny(self, *, tags: list[str] = DEFAULT_TAGS, url: str = "/metro/deny"):
+    def deny(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/deny"):
         """Deny API Decorator"""
 
         def wrapper(func: Awaitable):
