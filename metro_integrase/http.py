@@ -1,4 +1,3 @@
-import uuid
 import aiohttp
 from typing import List as ListT
 
@@ -91,7 +90,7 @@ You need to use ``Metro.paginate`` with this as this endpoint is paginated.
         
         return [List(**i) for i in json]
 
-    async def get_list(self, list_id: str | uuid.UUID) -> List:
+    async def get_list(self, list_id: str) -> List:
         """Get a list from Metro Reviews"""
         res, json = await self.request(url=f"/list/{list_id}", method="GET")
 
@@ -109,7 +108,7 @@ You need to use ``Metro.paginate`` with this as this endpoint is paginated.
 
         return [Bot(**i) for i in json]
     
-    async def get_bot(self, bot_id: str | uuid.UUID) -> Bot:
+    async def get_bot(self, bot_id: int) -> Bot:
         """Get a bot from Metro Reviews"""
         res, json = await self.request(url=f"/bots/{bot_id}", method="GET")
 
