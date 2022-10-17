@@ -112,7 +112,7 @@ class Metro():
 
         self._app.post(url, tags=tags)(metro_f)
 
-        self._urls[name] = url
+        self._urls[name] = f"{self.domain}{url}"
 
     def claim(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/claim"):
         """Claim API Decorator"""
