@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="metro_integrase",
-    version="0.0.6",
+    version="0.0.7",
     author="Rootspring",
     author_email="cheesycod@outlook.com",
     description="A Python wrapper for the Metro Reviews API",
