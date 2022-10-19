@@ -31,19 +31,19 @@ class Metro():
         metro = Metro(...)
 
         @metro.claim()
-        async def claim(bot: Bot):
+        async def claim(request: Request, bot: Bot):
             ...
 
         @metro.unclaim()
-        async def unclaim(bot: Bot):
+        async def unclaim(request: Request, bot: Bot):
             ...
 
         @metro.approve()
-        async def approve(bot: Bot):
+        async def approve(request: Request, bot: Bot):
             ...
 
         @metro.deny()
-        async def deny(bot: Bot):
+        async def deny(request: Request, bot: Bot):
             ...
 
         @app.on_event("startup")
@@ -122,7 +122,7 @@ class Metro():
                 if request.headers.get("Authorization") != self.http.secret_key:
                     return JSONResp({"detail": "Invalid secret key"}, status_code=401)
 
-                return await func(bot, *args, **kwargs)
+                return await func(request, bot, *args, **kwargs)
             except:
                 return JSONResp({"detail": traceback.format_exc()}, status_code=500)
 
