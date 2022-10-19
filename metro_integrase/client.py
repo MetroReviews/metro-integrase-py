@@ -1,4 +1,5 @@
 from functools import wraps
+from inspect import signature
 from typing import Awaitable, List as ListT
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
@@ -107,6 +108,12 @@ class Metro():
     def _wrapper(self, *, url: str, name: str, func: Awaitable, tags: ListT[str]):
         if not self._app:
             raise ValueError("App must be passed in order to use this method")
+
+        # Check the args of func
+        func_sig = signature(func)
+
+        if not func_sig.parameters.get("request"):
+            raise ValueError("Function must take request")
 
         @wraps(func)
         async def metro_f(request: Request, bot: Bot, *args, **kwargs):
