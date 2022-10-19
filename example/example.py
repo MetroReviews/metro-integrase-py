@@ -48,6 +48,8 @@ async def setup():
     async for act in metro.paginate(metro.http.get_actions):
         print(act)
 
+    print(await metro.wrapped["claim"]({}, {}, {}))
+
     # Finally setup the API endpoints, this must be done after all the @metro.* decorators to ensure they are registered with Metro Reviews
     await metro.register_api_urls()
 

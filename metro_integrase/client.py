@@ -1,10 +1,15 @@
 from functools import wraps
 from typing import Awaitable, List as ListT
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 
 from .http import MetroHTTP
 from .models import Bot, ListUpdate
+
+try:
+    from fastapi.responses import ORJSONResponse as JSONResp
+except:
+    from fastapi.responses import JSONResponse as JSONResp
 
 DEFAULT_TAGS = ["Metro (Integrase)"]
 """Default tags for the integrase routes"""
@@ -51,6 +56,7 @@ class Metro():
         self.domain = domain
         self._urls = {}
         self._app = app
+        self.wrapped = {}
     
     async def paginate(self, func: Awaitable, *, limit: int = 50):
         """
@@ -103,16 +109,17 @@ class Metro():
             raise ValueError("App must be passed in order to use this method")
 
         @wraps(func)
-        async def metro_f(request: Request, response: Response, bot: Bot, *args, **kwargs):
+        async def metro_f(request: Request, bot: Bot, *args, **kwargs):
             if request.headers.get("Authorization") != self.http.secret_key:
-                response.status_code = 401
-                return {"detail": "Invalid secret key"}
+                return JSONResp({"detail": "Invalid secret key"}, status_code=401)
 
             return await func(bot, *args, **kwargs)
 
         self._app.post(url, tags=tags)(metro_f)
 
         self._urls[name] = f"{self.domain}{url}"
+
+        self.wrapped[name] = metro_f
 
     def claim(self, *, tags: ListT[str] = DEFAULT_TAGS, url: str = "/metro/claim"):
         """Claim API Decorator"""
