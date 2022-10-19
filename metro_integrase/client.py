@@ -1,5 +1,6 @@
 from functools import wraps
 from inspect import signature
+import traceback
 from typing import Awaitable, List as ListT
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
@@ -117,10 +118,13 @@ class Metro():
 
         @wraps(func)
         async def metro_f(request: Request, bot: Bot, *args, **kwargs):
-            if request.headers.get("Authorization") != self.http.secret_key:
-                return JSONResp({"detail": "Invalid secret key"}, status_code=401)
+            try:
+                if request.headers.get("Authorization") != self.http.secret_key:
+                    return JSONResp({"detail": "Invalid secret key"}, status_code=401)
 
-            return await func(bot, *args, **kwargs)
+                return await func(bot, *args, **kwargs)
+            except:
+                return JSONResp({"detail": traceback.format_exc()}, status_code=500)
 
         self._app.post(url, tags=tags)(metro_f)
 
