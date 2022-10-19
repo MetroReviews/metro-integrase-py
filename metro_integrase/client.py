@@ -124,7 +124,9 @@ class Metro():
 
                 return await func(request, bot, *args, **kwargs)
             except:
-                return JSONResp({"detail": traceback.format_exc()}, status_code=500)
+                tb = traceback.format_exc()
+                print(tb)
+                return JSONResp({"detail": tb}, status_code=500)
 
         self._app.post(url, tags=tags)(metro_f)
 
