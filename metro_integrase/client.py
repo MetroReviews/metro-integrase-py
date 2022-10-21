@@ -53,9 +53,10 @@ class Metro():
     If you wish to use a HTTP method, use ``self.http`` or manually initialize ``MetroHTTP`` with the list ID and secret key.
     """
 
-    def __init__(self, *, domain: str, list_id: str, secret_key: str, app: FastAPI = None):
+    def __init__(self, *, domain: str, list_id: str, secret_key: str, app: FastAPI = None, website: str = None):
         self.http = MetroHTTP(list_id=list_id, secret_key=secret_key)
         self.domain = domain
+	self.website = website or None
         self._urls = {}
         self._app = app
         self.wrapped = {}
@@ -88,7 +89,6 @@ class Metro():
         """Register all decorated API endpoints with Metro Reviews using ``MetroHTTP.update_list``"""
         res, json = await self.http.update_list(
             ListUpdate(
-                domain=self.domain,
                 claim_bot_api=self._urls.get("claim"),
                 unclaim_bot_api=self._urls.get("unclaim"),
                 approve_bot_api=self._urls.get("approve"),
